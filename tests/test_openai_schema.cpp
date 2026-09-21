@@ -635,7 +635,6 @@ int test_aggregate_response() {
         "aggregate timings use exact cache and N-1 generation intervals");
 
     outcome.text.clear();
-    outcome.finish_reason = ninfer::FinishReason::OutputLimit;
     outcome.tool_calls.push_back(ninfer::GeneratedToolCall{
         .name = "Edit",
         .arguments_json =
@@ -692,7 +691,7 @@ int test_stream_response() {
     GenerationOutcome tool_outcome;
     tool_outcome.tool_calls.push_back(ninfer::GeneratedToolCall{
         .name = "Edit", .arguments_json = R"({"file_path":"/tmp/probe.cpp"})"});
-    tool_outcome.finish_reason                 = ninfer::FinishReason::OutputLimit;
+    tool_outcome.finish_reason                 = ninfer::FinishReason::StopToken;
     const std::vector<std::string> tool_events = tool_stream.finish(tool_outcome);
     const Json tool_delta                      = parse_sse(tool_events[0]);
     failures += check(
